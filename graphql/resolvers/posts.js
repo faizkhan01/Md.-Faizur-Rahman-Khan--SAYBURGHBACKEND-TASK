@@ -64,7 +64,7 @@ module.exports = {
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
-          await post.update({ body: body }, { new: true });
+          await post.updateOne({ body: body }, { new: true });
           return post;
         } else {
           throw new AuthenticationError("Action not allowed");
