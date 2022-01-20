@@ -46,7 +46,6 @@ module.exports = {
     },
     async deletePost(_, { postId }, context) {
       const user = checkAuth(context);
-
       try {
         const post = await Post.findById(postId);
         if (user.username === post.username) {
@@ -59,6 +58,22 @@ module.exports = {
         throw new Error(err);
       }
     },
+
+    async updatePost(_, { postId, body }, context) {
+      const user = checkAuth(context);
+      try {
+        const post = await Post.findById(postId);
+        if (user.username === post.username) {
+          await post.update({ body: body }, { new: true });
+          return post;
+        } else {
+          throw new AuthenticationError("Action not allowed");
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    },
+
     async likePost(_, { postId }, context) {
       const { username } = checkAuth(context);
 
