@@ -82,6 +82,17 @@ module.exports = {
         });
       }
 
+      // Make sure email is mot already taken
+      const em = await User.findOne({ email });
+
+      if (em) {
+        throw new UserInputError("email is already taken", {
+          errors: {
+            email: "This email is already taken",
+          },
+        });
+      }
+
       // hash password and create an auth token
 
       password = await bcrypt.hash(password, 12);
